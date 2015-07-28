@@ -725,9 +725,13 @@ int cancelReplicationHandshake(void) {
     return 1;
 }
 
+// 从机执行, 同步主机的状态
+// 指令介绍: http://redis.io/commands/slaveof
+// 这里只是设置一些状态, 具体逻辑执行如何触发的?
 void slaveofCommand(redisClient *c) {
     if (!strcasecmp(c->argv[1]->ptr,"no") &&
         !strcasecmp(c->argv[2]->ptr,"one")) {
+		// 不是slave则什么都不做.
         if (server.masterhost) {
             sdsfree(server.masterhost);
             server.masterhost = NULL;
